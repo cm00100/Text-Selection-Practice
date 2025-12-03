@@ -93,7 +93,7 @@
       border-radius: 999px;
       border: none;
       cursor: pointer;
-      background: #2f6fed; /* azul por defecto */
+      background: #2f6fed;
       color: white;
     }
 
@@ -124,17 +124,13 @@
       Use el panel táctil para marcar la palabra o la frase correcta.
     </div>
 
-    <div class="instruction-box" id="instructionBox">
-      <!-- Llenado por JavaScript -->
-    </div>
+    <div class="instruction-box" id="instructionBox"></div>
 
     <div class="hint">
       Consejo: Presione en el panel táctil, arrastre sobre el texto y luego suelte.
     </div>
 
-    <div class="passage" id="passage" tabindex="0">
-      <!-- Texto va aquí -->
-    </div>
+    <div class="passage" id="passage" tabindex="0"></div>
 
     <div class="feedback" id="feedback"></div>
 
@@ -146,7 +142,7 @@
   </div>
 
   <script>
-    // Lista de ejercicios (puede usar \n para varios objetivos)
+    // LISTA DE EJERCICIOS
     const challenges = [
       {
         type: "word",
@@ -184,13 +180,11 @@
         passage:
           "Esta es una página web. En una página web usted puede leer, ver videos y hacer clic en enlaces."
       },
-
-      // EJEMPLO: varios objetivos en un solo string (el alumno debe marcar TODOS a la vez)
       {
         type: "phrase",
-        target: "computadora\ninternet\nratón",
+        target: "computadora\ninternet\nteclado\nimpresora\nmonitor",
         passage:
-          "En esta clase usamos la computadora, el internet y el ratón. Marque en el texto la parte donde aparecen las palabras computadora, internet y ratón juntas."
+          "En esta clase usamos la computadora, el internet y el ratón. Marque en el texto la parte donde aparecen las palabras computadora, internet, teclado, impresora y monitor juntas."
       }
     ];
 
@@ -216,12 +210,11 @@
       const hasLineBreaks = challenge.target.includes("\n");
 
       if (hasLineBreaks) {
-        // Mostrar cada palabra en una línea con viñeta
         const items = challenge.target
           .split("\n")
           .map(w => w.trim())
           .filter(Boolean)
-          .map(w => `<strong>${w}</strong>`)   // ← MAKE EACH WORD BOLD
+          .map(w => `<strong>${w}</strong>`)
           .join("<br>");
 
         instructionBox.innerHTML =
@@ -238,11 +231,9 @@
       feedbackDiv.textContent = "";
       feedbackDiv.className = "feedback";
 
-      // Reset del botón Siguiente: gris y apagado
       nextButton.disabled = true;
       nextButton.classList.add("secondary");
 
-      // Quitar selección anterior de texto
       window.getSelection().removeAllRanges();
     }
 
@@ -259,7 +250,7 @@
       const challenge = challenges[currentIndex];
       const hasLineBreaks = challenge.target.includes("\n");
 
-      // 👉 CASO ESPECIAL: varios objetivos en el mismo string (con \n)
+      // MULTI-WORD STRICT MATCH
       if (hasLineBreaks) {
         const selectedNorm = normalize(selection);
 
@@ -268,27 +259,26 @@
           .map(w => normalize(w))
           .filter(Boolean);
 
-        // Tiene que contener TODAS las palabras
-        const allIncluded = words.every(word =>
-          selectedNorm.includes(word)
-        );
+        const targetJoined = words.join(" "); // strict order exact match
 
-        if (allIncluded) {
+        const exactMatch = selectedNorm === targetJoined;
+
+        if (exactMatch) {
           feedbackDiv.textContent = "✅ ¡Muy bien! Marcó todas las palabras juntas.";
           feedbackDiv.className = "feedback correct";
           nextButton.disabled = false;
           nextButton.classList.remove("secondary");
         } else {
           feedbackDiv.textContent =
-            "❌ No es correcto. Debe marcar TODAS las palabras a la vez.";
+            "❌ No es correcto. Debe marcar SOLO las palabras indicadas, sin texto adicional.";
           feedbackDiv.className = "feedback incorrect";
           nextButton.disabled = true;
           nextButton.classList.add("secondary");
         }
-        return; // no seguir con la lógica normal
+        return;
       }
 
-      // 👉 LÓGICA NORMAL: una sola palabra o una sola frase
+      // NORMAL SINGLE WORD OR PHRASE
       const selectedNorm = normalize(selection);
       const targetNorm = normalize(challenge.target);
 
@@ -315,10 +305,7 @@
       const challenge = challenges[currentIndex];
 
       if (challenge.target.includes("\n")) {
-        alert(
-          `Textos objetivo (todas juntas):\n\n` +
-          challenge.target
-        );
+        alert(`Textos objetivo (todas juntas):\n\n` + challenge.target);
       } else {
         alert(`Texto objetivo: "${challenge.target}"`);
       }
@@ -329,12 +316,9 @@
     showAnswerButton.addEventListener("click", showAnswer);
 
     document.addEventListener("keydown", (e) => {
-      if (e.key === "Enter") {
-        checkSelection();
-      }
+      if (e.key === "Enter") checkSelection();
     });
 
-    // Cargar primer ejercicio
     loadChallenge(currentIndex);
   </script>
 </body>
