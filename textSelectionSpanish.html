@@ -17,7 +17,7 @@
     .app {
       background: white;
       max-width: 900px;
-      width: 100%;
+      width: 100%;     
       padding: 24px;
       border-radius: 12px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.08);
@@ -37,7 +37,7 @@
     }
 
     .instruction-box {
-      background: #e8f3ff;
+      background: #faf1e8;
       border-left: 4px solid #2f6fed;
       padding: 12px 16px;
       border-radius: 8px;
@@ -54,6 +54,7 @@
       border-radius: 8px;
       padding: 16px;
       font-size: 1.1rem;
+      font-weight: bold;
       line-height: 1.6;
       cursor: text;
       user-select: text;
@@ -135,9 +136,9 @@
     <div class="feedback" id="feedback"></div>
 
     <div class="buttons">
-      <button id="checkButton">Revisar texto</button>
+      <button id="checkButton">Revisar Texto</button>
       <button id="nextButton" class="secondary" disabled>Siguiente</button>
-      <button id="showAnswerButton" class="secondary">Mostrar ayuda</button>
+      <button id="showAnswerButton" class="secondary">Mostrar Ayuda</button>
     </div>
   </div>
 
@@ -148,43 +149,48 @@
         type: "word",
         target: "computadora",
         passage:
-          "Hoy practicamos con la computadora. Busque la palabra computadora en este texto y márquela."
+          "Computadora"
       },
       {
         type: "phrase",
         target: "correo electrónico",
         passage:
-          "Cuando entra a su cuenta, escribe su correo electrónico y su contraseña. Ahora marque la frase correo electrónico."
+          "correo electrónico"
       },
       {
         type: "word",
         target: "ratón",
         passage:
-          "Algunas personas usan un ratón y otras usan un panel táctil. Hoy usamos el panel táctil."
+          "ratón"
       },
       {
         type: "phrase",
         target: "Google Chrome",
         passage:
-          "Para abrir internet, hacemos clic en el ícono de Google Chrome. Marque las palabras Google Chrome."
+          "Google Chrome"
       },
       {
         type: "word",
         target: "clic",
         passage:
-          "Para abrir un archivo, puede hacer doble clic. Para marcar texto, haga clic, mantenga presionado y arrastre."
+          "clic"
       },
       {
         type: "phrase",
         target: "página web",
         passage:
-          "Esta es una página web. En una página web usted puede leer, ver videos y hacer clic en enlaces."
+          "página web"
+      },
+       {
+        type: "phrase",
+        target: "panel tactil",
+        passage:
+          "panel tactil"
       },
       {
         type: "phrase",
-        target: "computadora\ninternet\nteclado\nimpresora\nmonitor",
-        passage:
-          "En esta clase usamos la computadora, el internet y el ratón. Marque en el texto la parte donde aparecen las palabras computadora, internet, teclado, impresora y monitor juntas."
+        target: "computadora\ninternet\nteclado\nimpresora\nmonitor"
+  
       }
     ];
 
@@ -218,13 +224,13 @@
           .join("<br>");
 
         instructionBox.innerHTML =
-          `Marque <strong>todas estas palabras a la vez</strong>:<br><br>${items}`;
+          `Instrucciónes: Resalta todas estas palabras en la lista a la vez:<br><br>${items}`;
       } else {
         const targetLabel =
           challenge.type === "word" ? "la palabra" : "la frase";
 
         instructionBox.innerHTML =
-          `Marque <strong>${targetLabel}</strong>: <strong>${challenge.target}</strong>`;
+          `Instrucciónes: Resalta ${targetLabel} '${challenge.target}' abajo, y luego presione el botón azul 'Revisar Texto'.`;
       }
 
       passageDiv.textContent = challenge.passage;
@@ -283,7 +289,7 @@
       const targetNorm = normalize(challenge.target);
 
       if (selectedNorm === targetNorm) {
-        feedbackDiv.textContent = "✅ ¡Muy bien! Marcó el texto correcto.";
+        feedbackDiv.textContent = "✅ ¡Muy bien! Marcó el texto correcto." 
         feedbackDiv.className = "feedback correct";
         nextButton.disabled = false;
         nextButton.classList.remove("secondary");
